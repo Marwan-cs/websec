@@ -1,49 +1,57 @@
 @extends('layouts.master')
-@section('title', 'User Profile')
-@section('content')
-<div class="row">
-    <div class="m-4 col-sm-6">
-        <table class="table table-striped">
-            <tr>
-                <th>Name</th><td>{{$user->name}}</td>
-            </tr>
-            <tr>
-                <th>Email</th><td>{{$user->email}}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>
-                    @foreach($user->roles as $role)
-                        <span class="badge bg-primary">{{$role->name}}</span>
-                    @endforeach
-                </td>
-            </tr>
-            <tr>
-                <th>Permissions</th>
-                <td>
-                    @foreach($permissions as $permission)
-                        <span class="badge bg-success">{{$permission->display_name}}</span>
-                    @endforeach
-                </td>
-            </tr>
-        </table>
 
-        <div class="row">
-            <div class="col col-6">
-            </div>
-            @if(auth()->user()->hasPermissionTo('admin_users')||auth()->id()==$user->id)
-            <div class="col col-4">
-                <a class="btn btn-primary" href='{{route('edit_password', $user->id)}}'>Change Password</a>
-            </div>
-            @else
-            <div class="col col-4">
-            </div>
+@section('title', 'My Profile')
+
+@section('content')
+<div class="container">
+    <div class="card">
+        <div class="card-header">My Profile</div>
+        <div class="card-body">
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
             @endif
-            @if(auth()->user()->hasPermissionTo('edit_users')||auth()->id()==$user->id)
-            <div class="col col-2">
-                <a href="{{route('users_edit', $user->id)}}" class="btn btn-success form-control">Edit</a>
-            </div>
-            @endif
+
+            <form action="{{ route('profile.update') }}" method="POST">
+                @csrf
+                @method('PUT')
+                
+                <div class="form-group mb-3">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control @error('name') is-invalid @enderror" 
+                           id="name" name="name" value="{{ old('name', $user->name) }}" required>
+                    @error('name')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control @error('email') is-invalid @enderror" 
+                           id="email" name="email" value="{{ old('email', $user->email) }}" required>
+                    @error('email')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="password">New Password (optional)</label>
+                    <input type="password" class="form-control @error('password') is-invalid @enderror" 
+                           id="password" name="password">
+                    @error('password')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="password_confirmation">Confirm New Password</label>
+                    <input type="password" class="form-control" 
+                           id="password_confirmation" name="password_confirmation">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+            </form>
         </div>
     </div>
 </div>
