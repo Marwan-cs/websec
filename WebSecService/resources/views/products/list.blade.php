@@ -79,13 +79,7 @@
                         <tr><th>Amount</th><td>{{ $product->amount }}</td></tr>
                     </table>
 
-                    <!-- Purchase Button -->
-                    <form action="{{ route('cart.add', $product->id) }}" method="POST" class="mt-3">
-                        @csrf
-                        <button type="submit" class="btn btn-primary form-control" {{ $product->amount <= 0 ? 'disabled' : '' }}>
-                            {{ $product->amount <= 0 ? 'Out of Stock' : 'Add to Cart' }}
-                        </button>
-                    </form>
+                    
 
                     <!-- Modify Stock Button (Admin and Employee Only) -->
                     @role(['admin', 'employee'])

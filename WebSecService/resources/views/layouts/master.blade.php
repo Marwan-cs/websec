@@ -9,16 +9,6 @@
 </head>
 <body>
     @include('layouts.menu')
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('cart.index') }}">
-            Cart 
-            @if(count(session('cart', [])))
-                <span class="badge bg-danger">
-                    {{ array_sum(session('cart', [])) }}
-                </span>
-            @endif
-        </a>
-    </li>
     <div class="container">
         @yield('content')
     </div>
