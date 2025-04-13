@@ -81,14 +81,4 @@ class RegisterController extends Controller
             throw $e;
         }
     }
-
-    /**
-     * Show the registration form.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function showRegistrationForm()
-    {
-        return view('auth.register');
-    }
 }

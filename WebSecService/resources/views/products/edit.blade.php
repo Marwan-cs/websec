@@ -1,124 +1,52 @@
 @extends('layouts.master')
-@section('title', 'Edit Product')
+@section('title', 'Prime Numbers')
 @section('content')
-<div class="container">
-    <div class="card">
-        <div class="card-header">
-            <h1 class="h3 mb-0">Edit Product</h1>
+
+<form action="{{route('products_save', $product->id)}}" method="post">
+    {{ csrf_field() }}
+    {{ csrf_field() }}
+    @foreach($errors->all() as $error)
+    <div class="alert alert-danger">
+    <strong>Error!</strong> {{$error}}
+    </div>
+    @endforeach
+    <div class="row mb-2">
+        <div class="col-6">
+            <label for="code" class="form-label">Code:</label>
+            <input type="text" class="form-control" placeholder="Code" name="code" required value="{{$product->code}}">
         </div>
-        <div class="card-body">
-            @if($errors->any())
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <ul class="mb-0">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
+        <div class="col-6">
+            <label for="model" class="form-label">Model:</label>
+            <input type="text" class="form-control" placeholder="Model" name="model" required value="{{$product->model}}">
+        </div>
+        <div class="col-6">
+            <label for="quantity" class="form-label">Quantity:</label>
+            <input type="number" class="form-control" placeholder="Quantity" name="quantity" required value="{{$product->quantity}}">
+        </div>
 
-            <form action="{{ route('products.save', $product->id) }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="code" class="form-label">Code</label>
-                            <input type="text" 
-                                   id="code"
-                                   name="code" 
-                                   class="form-control @error('code') is-invalid @enderror"
-                                   value="{{ old('code', $product->code) }}" 
-                                   required>
-                            @error('code')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="model" class="form-label">Model</label>
-                            <input type="text" 
-                                   id="model"
-                                   name="model" 
-                                   class="form-control @error('model') is-invalid @enderror"
-                                   value="{{ old('model', $product->model) }}" 
-                                   required>
-                            @error('model')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" 
-                                   id="name"
-                                   name="name" 
-                                   class="form-control @error('name') is-invalid @enderror"
-                                   value="{{ old('name', $product->name) }}" 
-                                   required>
-                            @error('name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="price" class="form-label">Price</label>
-                            <input type="number" 
-                                   id="price"
-                                   name="price" 
-                                   step="0.01" 
-                                   min="0"
-                                   class="form-control @error('price') is-invalid @enderror"
-                                   value="{{ old('price', $product->price) }}" 
-                                   required>
-                            @error('price')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-12">
-                        <div class="mb-3">
-                            <label for="photo" class="form-label">Photo</label>
-                            <input type="file" 
-                                   id="photo"
-                                   name="photo" 
-                                   class="form-control @error('photo') is-invalid @enderror">
-                            @if($product->photo)
-                                <small class="form-text text-muted">Current: {{ $product->photo }}</small>
-                            @endif
-                            @error('photo')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-12">
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Description</label>
-                            <textarea id="description"
-                                    name="description" 
-                                    class="form-control @error('description') is-invalid @enderror"
-                                    rows="3">{{ old('description', $product->description) }}</textarea>
-                            @error('description')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
-
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                    <a href="{{ route('products_list') }}" class="btn btn-secondary">Cancel</a>
-                </div>
-            </form>
+    </div>
+    <div class="row mb-2">
+        <div class="col">
+            <label for="name" class="form-label">Name:</label>
+            <input type="text" class="form-control" placeholder="Name" name="name" required value="{{$product->name}}">
         </div>
     </div>
-</div>
+    <div class="row mb-2">
+        <div class="col-6">
+            <label for="model" class="form-label">Price:</label>
+            <input type="numeric" class="form-control" placeholder="Price" name="price" required value="{{$product->price}}">
+        </div>
+        <div class="col-6">
+            <label for="model" class="form-label">Photo:</label>
+            <input type="text" class="form-control" placeholder="Photo" name="photo" required value="{{$product->photo}}">
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col">
+            <label for="name" class="form-label">Description:</label>
+            <textarea type="text" class="form-control" placeholder="Description" name="description" required>{{$product->description}}</textarea>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
 @endsection
