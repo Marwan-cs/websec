@@ -41,6 +41,11 @@ Route::post('forgot-password', [UsersController::class, 'sendTemporaryPassword']
 Route::get('change-password', [UsersController::class, 'showChangePassword'])->name('change.password')->middleware('auth');
 Route::post('change-password', [UsersController::class, 'changePassword'])->name('change.password.submit')->middleware('auth');
 
+// google auth
+
+Route::get('/auth/google',[UsersController::class, 'redirectToGoogle'])->name('login_with_google');
+Route::get('/auth/google/callback',[UsersController::class, 'handleGoogleCallback']);
+
 
 
 // Users Management

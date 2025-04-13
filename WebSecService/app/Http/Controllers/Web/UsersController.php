@@ -18,6 +18,7 @@ use App\Mail\VerificationEmail;
 use App\Mail\TemporaryPasswordMail;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use Laravel\Socialite\Facades\Socialite;
 
 class UsersController extends Controller {
 
@@ -290,4 +291,33 @@ class UsersController extends Controller {
 
         return redirect()->route('list_customers')->with('success', 'Credit added successfully.');
     }
+
+    public function redirectToGoogle()
+{
+    return Socialite::driver('google')->redirect();
+}
+
+public function handleGoogleCallback()
+{
+    try {
+        $googleUser = Socialite::driver('google')->user();
+        $user = User::updateOrCreate(
+            ['google_id' => $googleUser->id],
+            [
+                'name' => $googleUser->name,
+                'email' => $googleUser->email,
+                'google_token' => $googleUser->token,
+                'google_refresh_token' => $googleUser->refreshToken,
+                'email_verified_at' => now(),
+            ]
+        );
+
+        Auth::login($user);
+        return redirect('/'); // Adjust to your dashboard route
+    } catch (\Exception $e) {
+        \Log::error('Google OAuth Error: ' . $e->getMessage());
+        return redirect()->route('login')->withErrors('Google login failed: ' . $e->getMessage());
+    }
+}
+
 }
